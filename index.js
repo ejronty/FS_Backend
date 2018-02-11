@@ -32,6 +32,10 @@ app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
 
+app.get('/info', (req, res) => {
+  res.send(`<p>Puhelinluettelossa on ${persons.length} henkilön tiedot.</p> <p>${Date()}</p>`)
+})
+
 const port = 3001
 app.listen(port, () => {
   console.log(`Server running on port ${port}`)
