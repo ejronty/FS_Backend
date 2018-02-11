@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
 
 let persons = [
   {
@@ -53,6 +56,26 @@ app.delete('/api/persons/:id', (req, res) => {
   persons = persons.filter(person => person.id !== id)
 
   res.status(204).end()
+})
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body
+
+  if (body.name === undefined || body.number === undefined || body.name === "" || body.number === "") {
+    return res.status(400).json({error: 'Missing name or number'})
+  } else if (persons.find(person => person.name === body.name)) {
+    return res.status(400).json({error: 'Name already exists'})
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: Math.floor(Math.random() * 9999)
+  }
+
+  persons = persons.concat(person)
+
+  res.json(person)
 })
 
 const port = 3001
